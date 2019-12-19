@@ -121,16 +121,39 @@ class WorkflowViewWidget extends Widget
     	$jsonTransitions = \yii\helpers\Json::encode($trList);
    	
     	$js=<<<EOS
+		edgeOptions=[];
+		edgeOptions["forceDirection"]="hoizontal";
 		var {$this->visNetworkId} = new vis.Network(
+			
 			document.getElementById('{$this->containerId}'), 
 	    	{
+
 			    nodes: new vis.DataSet($jsonNodes),
-			    edges: new vis.DataSet($jsonTransitions)
+				
+				edges: new vis.DataSet($jsonTransitions)
 		  	}, 
 	    	{				    			    	
-				"physics": {
-					"solver": "repulsion"
-				}
+				
+				edges: {
+					smooth:{
+						type: "cubicBezier",
+						forceDirection: "vertical",
+						roundness: 0.4
+					}
+				},
+				
+				layout: {
+					
+					hierarchical: {
+						enabled:true,
+					  direction: 'LR',
+					  edgeMinimization:true,
+					  sortMethod: "directed",
+					  shakeTowards: "leaves"
+					  
+					}
+				},
+				physics: false
 			}
 	    );
 
